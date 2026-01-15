@@ -13,7 +13,7 @@ class SimpsonsSearchScreen extends StatefulWidget {
 
 class _SimpsonsSearchScreenState extends State<SimpsonsSearchScreen> {
   Future<Simpsonresponse?>? _simpsonInfo;
-  Future<Simpsonsresponse?>? _simpsonDetailedInfo;
+  Future<Simpsonmodel?>? _simpsonDetailedInfo;
   Repository repository = Repository();
   @override
   Widget build(BuildContext context) {
@@ -31,12 +31,12 @@ class _SimpsonsSearchScreenState extends State<SimpsonsSearchScreen> {
             onChanged: (text){
               setState(() {
                 print("text changed");
-                _simpsonDetailedInfo = repository.fetchSimpsonReponseInfoByNameTest(text);
+                _simpsonDetailedInfo = repository.fetchSimpsonReponseInfoByName(text);
                 //_simpsonInfo = repository.fetchSimpsonReponseInfo(text);
               });
             },
           ),
-          FutureBuilder(future: _simpsonInfo, builder: (context, snapshot){
+          FutureBuilder(future: _simpsonDetailedInfo, builder: (context, snapshot){
             if(snapshot.connectionState == ConnectionState.waiting){
               return CircularProgressIndicator();
             } else if(snapshot.hasError){
