@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:the_simpsons/data/model/simpsonModel.dart';
 import 'package:the_simpsons/data/model/simpsonResponse.dart';
 import 'package:the_simpsons/data/repository.dart';
 
