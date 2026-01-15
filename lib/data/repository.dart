@@ -44,7 +44,7 @@ class Repository {
 
   Future<Simpsonmodel> fetchSimpsonReponseInfoByName(String name) async {
     http.Response response;
-    name = name.toLowerCase().trim();
+    name = name.toLowerCase();
     String charaName;
     int i = 1;
 
@@ -54,13 +54,21 @@ class Repository {
       );
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
-        final Simpsonsresponse simpsonsResponse = Simpsonsresponse.fromJson(data);
+        final Simpsonsresponse simpsonsResponse = Simpsonsresponse.fromJson(
+          data,
+        );
         final List<Simpsonmodel> characters = simpsonsResponse.results;
         for (int i = 0; i < characters.length; i++) {
-            charaName = characters[i].name.toLowerCase().trim();
-          if (levenshtein(charaName, name) > 0.5) {
-            return characters[i];
+          charaName = characters[i].name.toLowerCase();
+          if(!name.contains(' ')) {
+            List<String> words = charaName.split(' ');
+            if (words.isNotEmpty){
+              charaName = words[0];
+            }
           }
+          if(levenshtein(charaName, name) > 0.5){
+            return characters[i];
+          };
         }
       } else {
         throw Exception("Ha ocurrico un error");
