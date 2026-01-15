@@ -1,11 +1,11 @@
-class Simpsonsmodel {
-  final List<dynamic> results;
+import 'package:the_simpsons/data/model/simpsonModel.dart';
 
+class Simpsonsresponse {
+  final List<Simpsonmodel> results;
+  Simpsonsresponse({required this.results});
 
-  Simpsonsmodel({required this.results});
-
-  factory Simpsonsmodel.fromJson(Map<String, dynamic> json){
-    return Simpsonsmodel(results: json["results"]);
+  factory Simpsonsresponse.fromJson(Map<String, dynamic> json){
+    return Simpsonsresponse(results: (json["results"] as List).map((e) => Simpsonmodel.fromJson(e)).toList());
     
   }
 }

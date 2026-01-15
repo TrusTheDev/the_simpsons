@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:the_simpsons/data/model/simpsonModel.dart';
 import 'package:the_simpsons/data/model/simpsonResponse.dart';
+import 'package:the_simpsons/data/model/simpsonsResponse.dart';
 import 'package:the_simpsons/data/repository.dart';
 
 class SimpsonsSearchScreen extends StatefulWidget {
@@ -11,6 +13,7 @@ class SimpsonsSearchScreen extends StatefulWidget {
 
 class _SimpsonsSearchScreenState extends State<SimpsonsSearchScreen> {
   Future<Simpsonresponse?>? _simpsonInfo;
+  Future<Simpsonsresponse?>? _simpsonDetailedInfo;
   Repository repository = Repository();
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,9 @@ class _SimpsonsSearchScreenState extends State<SimpsonsSearchScreen> {
             border: OutlineInputBorder()),
             onChanged: (text){
               setState(() {
-                _simpsonInfo = repository.fetchSimpsonReponseInfo(text);
+                print("text changed");
+                _simpsonDetailedInfo = repository.fetchSimpsonReponseInfoByNameTest(text);
+                //_simpsonInfo = repository.fetchSimpsonReponseInfo(text);
               });
             },
           ),
