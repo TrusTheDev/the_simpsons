@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:the_simpsons/data/model/simpsonModel.dart';
-import 'package:the_simpsons/data/model/simpsonResponse.dart';
+import 'package:the_simpsons/data/model/simpsonSimpleResponse.dart';
 import 'package:http/http.dart' as http;
 import 'package:the_simpsons/data/model/simpsonsResponse.dart';
 
@@ -35,18 +35,21 @@ class Repository {
       print("mapeado");
 
       final List<Simpsonmodel> characters = simpsonsResponse.results;
-
+      print("esto no deberia activarse");
       return simpsonsResponse;
     } else {
       throw Exception("Ha ocurrido un error");
     }
   }
 
-  Future<Simpsonmodel> fetchSimpsonReponseInfoByName(String name) async {
+  Future<Simpsonmodel?> fetchSimpsonReponseInfoByName(String name) async {
     http.Response response;
-    name = name.toLowerCase();
+    name = normalize(name);
     String charaName;
     int i = 1;
+    double similarity = 0.0;
+    double aux = 0.0;
+    Simpsonmodel? bestMatch;
 
     do {
       response = await http.get(
@@ -58,28 +61,56 @@ class Repository {
           data,
         );
         final List<Simpsonmodel> characters = simpsonsResponse.results;
+        if (characters.isEmpty) {
+          break;
+        }
+
         for (int i = 0; i < characters.length; i++) {
-          charaName = characters[i].name.toLowerCase();
-          if(!name.contains(' ')) {
-            List<String> words = charaName.split(' ');
-            if (words.isNotEmpty){
-              charaName = words[0];
-            }
+          charaName = normalize(characters[i].name);
+
+          if (name.length > charaName.length + 3) {
+            print("EL largo de nombre es mayor al de la BD");
+            continue;
           }
-          if(levenshtein(charaName, name) > 0.5){
+
+          if (charaName == name) {
+            print("Caso super omega igual");
             return characters[i];
-          };
+          }
+
+          if (charaName.contains(name)) {
+            print("el nombre contiene la palabra");
+            return characters[i];
+          } else {
+            aux = levenshtein(charaName, name);
+          }
+          if (aux >= 0.6 || aux > similarity) {
+            similarity = aux;
+            bestMatch = characters[i];
+          }
         }
       } else {
+        print("Devolvi un error");
         throw Exception("Ha ocurrico un error");
       }
 
       i++;
     } while (true);
+
+    if (bestMatch != null && bestMatch.name.length < name.length) {
+      print("Devolvi null por fuera de levenshtein");
+      return null;
+    }
+    print("Devolvi el caso mas cercano");
+    return bestMatch;
+  }
+
+  String normalize(String s) {
+    return s.toLowerCase().replaceAll(RegExp(r'[^a-z\s]'), '').trim();
   }
 
   double levenshtein(String s, String t) {
-    if (s == t) return 0;
+    if (s == t) return 1.0;
     if (s.isEmpty) return t.length.toDouble();
     if (t.isEmpty) return s.length.toDouble();
 

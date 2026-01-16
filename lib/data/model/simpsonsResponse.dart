@@ -6,6 +6,6 @@ class Simpsonsresponse {
 
   factory Simpsonsresponse.fromJson(Map<String, dynamic> json){
     return Simpsonsresponse(results: (json["results"] as List).map((e) => Simpsonmodel.fromJson(e)).toList());
-    
+  
   }
 }
