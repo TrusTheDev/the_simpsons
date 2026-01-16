@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_simpsons/data/model/simpsonModel.dart';
 import 'package:the_simpsons/data/model/simpsonSimpleResponse.dart';
-import 'package:the_simpsons/data/model/simpsonsResponse.dart';
 import 'package:the_simpsons/data/repository.dart';
 
 class SimpsonsSearchScreen extends StatefulWidget {
