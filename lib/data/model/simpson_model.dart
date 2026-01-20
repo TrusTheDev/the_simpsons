@@ -3,10 +3,10 @@ class Simpsonmodel {
   final String name;
   final int? age;
   final String? gender;
-  final String portrait_path;
+  final String portaitPath;
   final List<String> phrases;
 
-  Simpsonmodel({required this.name, required this.age, required this.gender, required this.phrases, required this.id, required this.portrait_path});
+  Simpsonmodel({required this.name, required this.age, required this.gender, required this.phrases, required this.id, required this.portaitPath});
 
   factory Simpsonmodel.fromJson(Map<String, dynamic> json){
     return Simpsonmodel(
@@ -14,7 +14,7 @@ class Simpsonmodel {
       name: json['name'], 
       age: json['age'], 
       gender: json['gender'], 
-      portrait_path: json['portrait_path'],
+      portaitPath: json['portaitPath'],
       phrases: List<String>.from(json['phrases'] ?? []),
 
       );

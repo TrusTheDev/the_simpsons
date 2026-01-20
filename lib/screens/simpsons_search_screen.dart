@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_simpsons/data/model/simpsonModel.dart';
-import 'package:the_simpsons/data/model/simpsonSimpleResponse.dart';
+import 'package:the_simpsons/data/model/dto_search_model.dart';
 import 'package:the_simpsons/data/repository.dart';
 
 class SimpsonsSearchScreen extends StatefulWidget {
@@ -11,8 +10,9 @@ class SimpsonsSearchScreen extends StatefulWidget {
 }
 
 class _SimpsonsSearchScreenState extends State<SimpsonsSearchScreen> {
-  Future<Simpsonresponse?>? _simpsonInfo;
-  Future<Simpsonmodel?>? _simpsonDetailedInfo;
+  //Future<Simpsonresponse?>? _simpsonInfo;
+  //Future<Simpsonmodel?>? _simpsonDetailedInfo;
+  Future<List<Dtosearchmodel?>?>? _simpsonDetailedMatches;
   Repository repository = Repository();
   @override
   Widget build(BuildContext context) {
@@ -29,19 +29,29 @@ class _SimpsonsSearchScreenState extends State<SimpsonsSearchScreen> {
             border: OutlineInputBorder()),
             onChanged: (text){
               setState(() {
-                _simpsonDetailedInfo = repository.fetchSimpsonReponseInfoByName(text);
+                _simpsonDetailedMatches = repository.fetchSimpsonResponses(text, 5);
+                //_simpsonDetailedInfo = repository.fetchSimpsonReponseInfoByName(text);
                 //_simpsonInfo = repository.fetchSimpsonReponseInfo(text);
               });
             },
           ),
-          FutureBuilder(future: _simpsonDetailedInfo, builder: (context, snapshot){
+          FutureBuilder(future: _simpsonDetailedMatches, builder: (context, snapshot){
             if(snapshot.connectionState == ConnectionState.waiting){
               return CircularProgressIndicator();
             } else if(snapshot.hasError){
-              Text("${snapshot.data?.name}");
               return Text("Error: ${snapshot.error}");
             } else if(snapshot.hasData){
-              return Text("${snapshot.data?.name}");
+              var simpsonList = snapshot.data;
+              return ListView.builder(
+                itemCount: simpsonList?.length ?? 0,
+                itemBuilder: (context, index){
+                  if(simpsonList != null){
+                    Text(simpsonList[index]!.simpsonmodel.name);
+                  }
+                });
+
+    
+
             } else {
               return Text("No hay resultados.");
             }
