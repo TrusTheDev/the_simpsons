@@ -3,8 +3,8 @@ import 'package:the_simpsons/data/model/dto_search_model.dart';
 import 'package:the_simpsons/data/model/simpson_model.dart';
 import 'package:the_simpsons/data/model/simpson_simple_response.dart';
 import 'package:http/http.dart' as http;
-import 'package:the_simpsons/data/model/simpsonsResponse.dart';
-import 'package:the_simpsons/searchService/searchSimpsonService.dart';
+import 'package:the_simpsons/data/model/simpsons_response.dart';
+import 'package:the_simpsons/searchService/search_simpsonservice.dart';
 
 class Repository {
   Future<SimpsonSimpleResponse> fetchSimpsonReponseInfo(String id) async {
@@ -21,10 +21,10 @@ class Repository {
     }
   }
 
-  Future<List<Dtosearchmodel?>> fetchSimpsonResponses(String name, int responses) async {
+  Future<List<Dtosearchmodel>> fetchSimpsonResponses(String name, int responses) async {
     http.Response response;
     int i = 1;
-    List<Dtosearchmodel?> matches= List<Dtosearchmodel?>.filled(responses,null);
+    List<Dtosearchmodel> matches= [];
     do {
       response = await http.get(Uri.parse("https://thesimpsonsapi.com/api/characters?page=$i"));
       if(response.statusCode == 200){
@@ -33,6 +33,7 @@ class Repository {
           data,
         );
         final List<Simpsonmodel> characters = simpsonsResponse.results;
+        
         matches = Searchsimpsonservice.searchMostSimilarMatches(matches, characters, name, responses);
       if(characters.isEmpty){
         return matches;
@@ -42,8 +43,6 @@ class Repository {
       }
       i++;
     } while (true);
-
-
   }
 
   Future<Simpsonmodel?> fetchSimpsonReponseInfoByName(String name) async {
@@ -123,8 +122,12 @@ class Repository {
       (_) => List.filled(t.length + 1, 0),
     );
 
-    for (int i = 0; i <= s.length; i++) matrix[i][0] = i;
-    for (int j = 0; j <= t.length; j++) matrix[0][j] = j;
+    for (int i = 0; i <= s.length; i++) {
+      matrix[i][0] = i;
+    }
+    for (int j = 0; j <= t.length; j++) {
+      matrix[0][j] = j;
+    }
 
     for (int i = 1; i <= s.length; i++) {
       for (int j = 1; j <= t.length; j++) {

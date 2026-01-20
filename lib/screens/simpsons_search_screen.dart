@@ -12,7 +12,7 @@ class SimpsonsSearchScreen extends StatefulWidget {
 class _SimpsonsSearchScreenState extends State<SimpsonsSearchScreen> {
   //Future<Simpsonresponse?>? _simpsonInfo;
   //Future<Simpsonmodel?>? _simpsonDetailedInfo;
-  Future<List<Dtosearchmodel?>?>? _simpsonDetailedMatches;
+  Future<List<Dtosearchmodel>>? _simpsonDetailedMatches;
   Repository repository = Repository();
   @override
   Widget build(BuildContext context) {
@@ -42,13 +42,17 @@ class _SimpsonsSearchScreenState extends State<SimpsonsSearchScreen> {
               return Text("Error: ${snapshot.error}");
             } else if(snapshot.hasData){
               var simpsonList = snapshot.data;
-              return ListView.builder(
-                itemCount: simpsonList?.length ?? 0,
-                itemBuilder: (context, index){
-                  if(simpsonList != null){
-                    Text(simpsonList[index]!.simpsonmodel.name);
-                  }
-                });
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: simpsonList?.length ?? 0,
+                  itemBuilder: (context, index){
+                    final item = simpsonList![index];
+                
+                    return ListTile(title: Text(item.simpsonmodel.name),
+                    subtitle: Text("${item.similarity.toStringAsFixed(2)}"),
+                    );
+                  }),
+              );
 
     
 

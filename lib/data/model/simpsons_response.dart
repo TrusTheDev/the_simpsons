@@ -1,4 +1,4 @@
-import 'package:the_simpsons/data/model/simpsonModel.dart';
+import 'package:the_simpsons/data/model/simpson_model.dart';
 
 class Simpsonsresponse {
   final List<Simpsonmodel> results;

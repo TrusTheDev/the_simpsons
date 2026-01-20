@@ -2,11 +2,10 @@ import 'package:the_simpsons/data/model/dto_search_model.dart';
 import 'package:the_simpsons/data/model/simpson_model.dart';
 
 class Searchsimpsonservice {
-  static List<Dtosearchmodel?> searchMostSimilarMatches(List<Dtosearchmodel?> matches,List<Simpsonmodel> characters, String name, int responses){
+  static List<Dtosearchmodel> searchMostSimilarMatches(List<Dtosearchmodel> matches,List<Simpsonmodel> characters, String name, int responses){
     name = normalize(name);
     String charaName;
     double similarity;
-
     for (int i = 0; i < characters.length; i++) {
       charaName = normalize(characters[i].name);
       if (name.length > charaName.length + 3) {
@@ -28,7 +27,7 @@ class Searchsimpsonservice {
           );
         } else {
           for (int j = 0; j < responses; j++) {
-            if (similarity > matches[i]!.similarity) {
+            if (similarity > matches[j].similarity) {
               matches[i] = Dtosearchmodel(
                 similarity: similarity,
                 simpsonmodel: characters[i],
