@@ -30,8 +30,6 @@ class _SimpsonsSearchScreenState extends State<SimpsonsSearchScreen> {
             onChanged: (text){
               setState(() {
                 _simpsonDetailedMatches = repository.fetchSimpsonResponses(text, 5);
-                //_simpsonDetailedInfo = repository.fetchSimpsonReponseInfoByName(text);
-                //_simpsonInfo = repository.fetchSimpsonReponseInfo(text);
               });
             },
           ),
@@ -47,15 +45,11 @@ class _SimpsonsSearchScreenState extends State<SimpsonsSearchScreen> {
                   itemCount: simpsonList?.length ?? 0,
                   itemBuilder: (context, index){
                     final item = simpsonList![index];
-                
                     return ListTile(title: Text(item.simpsonmodel.name),
-                    subtitle: Text("${item.similarity.toStringAsFixed(2)}"),
+                    subtitle: Text("${item.similarity.toStringAsFixed(2)} ${item.simpsonmodel.id}"),
                     );
                   }),
               );
-
-    
-
             } else {
               return Text("No hay resultados.");
             }
