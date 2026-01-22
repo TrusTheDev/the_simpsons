@@ -39,24 +39,58 @@ class _SimpsonsSearchScreenState extends State<SimpsonsSearchScreen> {
             } else if(snapshot.hasError){
               return Text("Error: ${snapshot.error}");
             } else if(snapshot.hasData){
-              var simpsonList = snapshot.data;
-              return Expanded(
-                child: ListView.builder(
-                  itemCount: simpsonList?.length ?? 0,
-                  itemBuilder: (context, index){
-                    final item = simpsonList![index];
-                    return ListTile(title: Text(item.simpsonmodel.name),
-                    subtitle: Text("${item.similarity.toStringAsFixed(2)} ${item.simpsonmodel.id}"),
-                    );
-                  }),
-              );
-            } else {
-              return Text("No hay resultados.");
-            }
-          })
+                  var simpsonList = snapshot.data;
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: simpsonList?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        final item = simpsonList![index];
+                        return itemSimpson(item);
+                      },
+                    ),
+                  );
+                } else {
+                  return Text("No hay resultados.");
+                }
+              },
+            ),
           ],
         ),
       ),
     );
   }
+
+Widget itemSimpson(Dtosearchmodel item) {
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+          child: Image.network(
+            "https://cdn.thesimpsonsapi.com/1280${item.simpsonmodel.portaitPath}",
+            fit: BoxFit.cover,
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.amber,
+            borderRadius: const BorderRadius.vertical(
+              bottom: Radius.circular(16),
+            ),
+          ),
+          child: Text(
+            item.simpsonmodel.name,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 }
